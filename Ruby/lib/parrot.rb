@@ -1,6 +1,10 @@
+autoload(:EuropeanParrot, 'european_parrot.rb')
+autoload(:AfricanParrot, 'african_parrot.rb')
+autoload(:NorwegianBlueParrot, 'norwegian_blue_parrot.rb')
+
 class Parrot
 
-  def initialize type, number_of_coconuts, voltage, nailed
+  def initialize type=nil, number_of_coconuts=nil, voltage=nil, nailed=nil
     @type = type
     @number_of_coconuts = number_of_coconuts
     @voltage = voltage
@@ -10,11 +14,11 @@ class Parrot
   def speed
     case @type
     when :european_parrot
-      return base_speed
+      return EuropeanParrot.new.speed
     when :african_parrot
-      return [0, base_speed - load_factor * @number_of_coconuts].max
+      return AfricanParrot.new(nil,@number_of_coconuts,nil,nil).speed
     when :norwegian_blue_parrot
-      return (@nailed) ? 0 : compute_base_speed_for_voltage(@voltage)
+      return NorwegianBlueParrot.new(nil,nil,@voltage, @nailed).speed
     end
 
     throw "Should be unreachable!"
@@ -22,13 +26,6 @@ class Parrot
 
   private
 
-  def compute_base_speed_for_voltage voltage
-    [24.0, voltage * base_speed].min
-  end
-
-  def load_factor
-    9.0
-  end
 
   def base_speed
     12.0
